@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TurnLeaf</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --brand:#3B9B6C;--brand-d:#2D7A54;--brand-l:#E8F6EE;
+  --warm:#F2A94B;--warm-l:#FFF6E8;
+  --bg:#FAFAF7;--card:#FFF;
+  --t1:#1A1A1A;--t2:#5A5A5A;--t3:#9A9A9A;--t4:#C8C8C8;--t5:#E8E8E8;
+  --r:14px;--r2:20px;--rl:60px;
+  --ff:'Nunito','Noto Sans SC',sans-serif;
+  --bounce:cubic-bezier(.2,1.4,.4,1);
+}
+html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user-select:none}
+.phone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:393px;height:852px;border-radius:50px;overflow:hidden;box-shadow:0 0 0 4px #1a1a1a,0 0 80px rgba(0,0,0,.5);background:var(--bg)}
+.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:126px;height:36px;background:#111;border-radius:0 0 20px 20px;z-index:9999}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}.scr.on{display:flex}
+.gl{background:linear-gradient(135deg,rgba(255,255,255,.38),rgba(255,255,255,.12));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.40);box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,255,255,.08)}
+.gl-s{background:linear-gradient(135deg,rgba(59,155,108,.75),rgba(108,196,158,.65));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.20);box-shadow:0 4px 18px rgba(59,155,108,.20),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.05);color:white}
+.gl-b{background:linear-gradient(135deg,rgba(255,255,255,.45),rgba(255,255,255,.18));backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.40);box-shadow:0 2px 8px rgba(0,0,0,.03),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn{border:none;cursor:pointer;font-family:var(--ff);transition:transform .25s var(--bounce),filter .15s}.btn:hover{transform:scale(1.06);filter:brightness(1.04)}.btn:active{transform:scale(.94)}
+.g-input{width:100%;padding:12px 16px;border-radius:var(--r);font-size:13px;font-family:var(--ff);outline:none;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.25));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35);transition:border-color .2s}.g-input:focus{border-color:var(--brand)}.g-input::placeholder{color:var(--t4)}
+
+/* SPLASH */
+#splash{background:linear-gradient(165deg,#1A4A32 0%,#2A7050 30%,var(--brand) 60%,#6CC49E 85%,#A8E0C0 100%);min-height:852px;justify-content:center;align-items:center;position:relative}
+.sp-orb{position:absolute;border-radius:50%;opacity:.06;animation:orbF 16s ease-in-out infinite}
+.sp-orb:nth-child(1){width:200px;height:200px;top:-40px;right:-50px;background:white}
+.sp-orb:nth-child(2){width:130px;height:130px;bottom:100px;left:-30px;background:var(--warm);animation-delay:5s}
+@keyframes orbF{0%,100%{transform:translate(0,0)}50%{transform:translate(12px,-12px)}}
+.sp-w{position:relative;z-index:2;text-align:center}
+.sp-bal{width:260px;height:240px;margin:0 auto;position:relative;animation:spB .8s var(--bounce) both}
+.sp-t{font-size:48px;font-weight:900;color:white;letter-spacing:-1px;animation:spB .8s var(--bounce) .08s both}
+.sp-s{font-size:14px;color:rgba(255,255,255,.50);margin-top:4px;animation:spB .8s var(--bounce) .15s both}
+.sp-btn{margin-top:32px;width:260px;padding:17px 0;font-size:16px;font-weight:700;color:var(--t1);border-radius:var(--rl);animation:spB .8s var(--bounce) .22s both}
+@keyframes spB{from{opacity:0;transform:translateY(24px) scale(.95)}to{opacity:1;transform:none}}
+.bl{position:absolute;transform-origin:center bottom}
+.bl-1{left:2%;top:4%;animation:bF1 4.2s ease-in-out infinite}
+.bl-2{right:2%;top:0%;animation:bF2 5s ease-in-out infinite}
+.bl-3{left:28%;top:-8%;animation:bF3 3.6s ease-in-out infinite}
+.bl-4{left:4%;top:42%;animation:bF4 4.8s ease-in-out infinite}
+.bl-5{right:8%;top:40%;animation:bF5 3.9s ease-in-out infinite}
+@keyframes bF1{0%,100%{transform:translate(0,0) rotate(-1deg)}30%{transform:translate(-6px,-8px) rotate(-4deg)}70%{transform:translate(4px,-5px) rotate(2deg)}}
+@keyframes bF2{0%,100%{transform:translate(0,0) rotate(1deg)}25%{transform:translate(5px,-10px) rotate(4deg)}75%{transform:translate(-3px,-6px) rotate(-2deg)}}
+@keyframes bF3{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(-2px,-10px) scale(1.03)}50%{transform:translate(3px,-14px) scale(1.05)}75%{transform:translate(-1px,-6px) scale(1.01)}}
+@keyframes bF4{0%,100%{transform:translate(0,0)}40%{transform:translate(-5px,-6px) rotate(-3deg)}80%{transform:translate(3px,-3px) rotate(2deg)}}
+@keyframes bF5{0%,100%{transform:translate(0,0)}35%{transform:translate(4px,-7px) rotate(2deg)}70%{transform:translate(-2px,-4px) rotate(-1deg)}}
+.sk{position:absolute;width:4px;height:4px;border-radius:50%;background:white}
+.sk-1{left:6%;top:18%;animation:skP 2s ease-in-out infinite}.sk-2{right:8%;top:12%;animation:skP 2.8s ease-in-out infinite .4s}.sk-3{right:4%;bottom:34%;animation:skP 2.4s ease-in-out infinite .8s}
+@keyframes skP{0%,100%{opacity:.12;transform:scale(1)}50%{opacity:.45;transform:scale(1.5)}}
+
+/* MAIN */
+#main{background:var(--bg)}
+.m-hdr{padding:54px 20px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.logo{font-size:26px;font-weight:900;color:var(--brand-d)}.logo b{color:var(--warm)}
+.m-icons{display:flex;gap:8px}
+.m-ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;position:relative}
+.m-ic .dot{position:absolute;top:-3px;right:-3px;width:16px;height:16px;border-radius:50%;background:var(--warm);font-size:9px;color:white;display:flex;align-items:center;justify-content:center;font-weight:800}
+.m-cards{flex:1;min-height:0;position:relative;margin:6px 18px 0}
+.cstk{position:absolute;inset:0}
+.cd{position:absolute;inset:0;border-radius:var(--r2);overflow:hidden;display:flex;flex-direction:column;background:var(--card);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:transform .5s var(--bounce),opacity .5s;will-change:transform;cursor:grab}.cd:active{cursor:grabbing}
+.cd.front{z-index:5}.cd.bk1{transform:scale(.95) translateY(10px);opacity:.35;z-index:2;pointer-events:none}.cd.bk2{transform:scale(.90) translateY(20px);opacity:.15;z-index:1;pointer-events:none}
+.cd-vis{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cd-bg{position:absolute;inset:0}
+.cd-pw{position:relative;z-index:2;animation:cdF 6s ease-in-out infinite}
+@keyframes cdF{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.cd-pill{position:absolute;z-index:3;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.cd-dist{top:12px;right:12px;color:var(--t2)}.cd-hp{top:12px;left:12px}.cd-hp.ok{color:var(--brand-d)}.cd-hp.sos{color:#D35}
+.swl{position:absolute;top:28%;left:50%;z-index:20;pointer-events:none;font-size:24px;font-weight:900;padding:6px 18px;border-radius:10px;border:3px solid;opacity:0;transition:opacity .1s,transform .15s var(--bounce)}
+.swl.lk{color:var(--brand);border-color:var(--brand);transform:translate(-50%,-50%) rotate(-12deg) scale(0)}.swl.np{color:var(--warm);border-color:var(--warm);transform:translate(-50%,-50%) rotate(12deg) scale(0)}
+.swl.show{opacity:1}.swl.lk.show{transform:translate(-50%,-50%) rotate(-12deg) scale(1)}.swl.np.show{transform:translate(-50%,-50%) rotate(12deg) scale(1)}
+.cd-body{padding:14px 18px 12px;flex-shrink:0;border-top:1px solid var(--t5)}
+.cd-nm{font-size:21px;font-weight:800;color:var(--t1)}.cd-sp{font-size:12px;color:var(--t3);margin-left:8px}
+.cd-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{padding:4px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.tag-g{background:var(--brand-l);color:var(--brand)}.tag-o{background:var(--warm-l);color:var(--warm)}.tag-b{background:#EAF2FF;color:#4A8AD4}
+.cd-q{margin-top:10px;font-size:13px;color:var(--t2);font-style:italic;line-height:1.5;padding-left:14px;position:relative}.cd-q::before{content:'\201C';position:absolute;left:0;top:-4px;font-size:22px;color:var(--warm);font-weight:700}
+.cd-df{margin-top:8px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3)}.dfb{display:flex;gap:2px}.dfd{width:16px;height:4px;border-radius:2px;background:var(--t5)}.dfd.on{background:var(--brand)}
+.m-acts{padding:10px 0 4px;display:flex;justify-content:center;align-items:center;gap:16px;flex-shrink:0}
+.act{border-radius:50%;display:flex;align-items:center;justify-content:center}
+.act-p{width:52px;height:52px;font-size:20px;color:var(--t3)}.act-l{width:68px;height:68px;font-size:28px}.act-i{width:42px;height:42px;font-size:16px;color:var(--t3)}
+.tbar{display:flex;margin:6px 18px 24px;padding:3px;border-radius:var(--r2);flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:none;background:none;cursor:pointer;border-radius:16px;transition:all .25s var(--bounce);font-family:var(--ff);position:relative}
+.tab .ti{font-size:18px;opacity:.25;transition:opacity .2s}.tab .tl{font-size:9px;color:var(--t3);font-weight:600}
+.tab.on{background:rgba(59,155,108,.10)}.tab.on .ti{opacity:1}.tab.on .tl{color:var(--brand-d);font-weight:700}
+.tab .td{position:absolute;top:3px;right:calc(50% - 12px);width:6px;height:6px;background:var(--warm);border-radius:50%}
+#mp{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:36px}#mp.show{display:flex}
+.mp-w{text-align:center;animation:mpB .6s var(--bounce)}@keyframes mpB{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.mp-t{font-size:28px;font-weight:900;color:white;margin-top:12px}.mp-s{font-size:14px;color:rgba(255,255,255,.50);margin-top:6px}
+.mp-cd{margin-top:20px;padding:14px;display:flex;align-items:center;gap:12px;border-radius:var(--r2);width:260px;text-align:left;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10)}
+.mp-cd h4{font-size:15px;font-weight:700;color:white}.mp-cd p{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.mp-bs{margin-top:24px;display:flex;flex-direction:column;gap:10px;width:260px}
+.mp-b1{padding:14px;border-radius:var(--rl);font-size:15px;font-weight:700;cursor:pointer;font-family:var(--ff);border:none;transition:transform .25s var(--bounce)}.mp-b1:hover{transform:scale(1.04)}.mp-b1:active{transform:scale(.96)}
+.mp-b2{padding:12px;border-radius:var(--rl);font-size:14px;font-weight:500;background:transparent;border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);cursor:pointer;font-family:var(--ff)}
+/* MSG */
+#msg{background:var(--bg)}.msg-h{padding:54px 22px 14px;flex-shrink:0}.msg-h h2{font-size:26px;font-weight:900;color:var(--t1)}
+.nm{padding:0 22px;margin-bottom:14px;flex-shrink:0}.nm h3{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.nm-s{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none}.nm-s::-webkit-scrollbar{display:none}
+.nm-b{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex-shrink:0}
+.nm-bi{width:54px;height:54px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--brand-l);transition:transform .25s var(--bounce)}.nm-b:hover .nm-bi{transform:scale(1.1)}
+.nm-bn{font-size:10px;font-weight:600;color:var(--t2)}
+.msg-l{flex:1;overflow-y:auto;padding:0 22px;scrollbar-width:none}.msg-l::-webkit-scrollbar{display:none}.msg-l h3{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
+.msg-i{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;border-radius:var(--r);cursor:pointer;transition:transform .2s var(--bounce);background:var(--card);border:1px solid var(--t5)}.msg-i:hover{transform:translateX(4px)}
+.msg-av{width:42px;height:42px;border-radius:12px;overflow:hidden;background:var(--brand-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.msg-in{flex:1;min-width:0}.msg-in h4{font-size:14px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:5px}.msg-in .tg{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:700;background:var(--warm-l);color:var(--warm)}.msg-in p{font-size:12px;color:var(--t3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-t{font-size:10px;color:var(--t3);flex-shrink:0}.msg-d{width:8px;height:8px;background:var(--brand);border-radius:50%;flex-shrink:0}
+/* CHAT */
+#chat{background:var(--bg)}
+.ch-top{padding:50px 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ch-bk{width:32px;height:32px;border:none;background:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ch-p{display:flex;align-items:center;gap:8px;flex:1}.ch-p .ch-av{width:32px;height:32px;border-radius:10px;overflow:hidden;background:var(--brand-l);display:flex;align-items:center;justify-content:center}.ch-p h4{font-size:14px;font-weight:700;color:var(--t1)}.ch-p p{font-size:10px;color:var(--t3)}
+.ch-cfm{padding:7px 14px;border-radius:10px;font-size:11px;font-weight:700;font-family:var(--ff)}
+.ch-ms{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:none}.ch-ms::-webkit-scrollbar{display:none}
+.bub{max-width:75%;padding:11px 15px;border-radius:var(--r2);font-size:13px;line-height:1.55}.bub.th{align-self:flex-start;border-bottom-left-radius:4px;color:var(--t1)}.bub.me{align-self:flex-end;border-bottom-right-radius:4px}.bub .bn{font-size:10px;font-weight:700;color:var(--warm);margin-bottom:2px}
+.ch-bar{padding:10px 14px 30px;display:flex;gap:8px;flex-shrink:0}
+.ch-sn{width:40px;height:40px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* ====== CERTIFICATE — emotional, celebratory ====== */
+#cert{
+  background:radial-gradient(ellipse at 50% 40%,#1E5A3E 0%,#14402C 40%,#0D2E1E 80%,#081A12 100%);
+  min-height:852px;justify-content:center;align-items:center;padding:24px;position:relative;overflow:hidden;
+}
+/* Warm ambient glow behind badge */
+.cert-glow{
+  position:absolute;top:18%;left:50%;transform:translateX(-50%);
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(242,169,75,.12) 0%,rgba(59,155,108,.08) 40%,transparent 70%);
+  animation:glowPulse 4s ease-in-out infinite;
+}
+@keyframes glowPulse{0%,100%{transform:translateX(-50%) scale(1);opacity:1}50%{transform:translateX(-50%) scale(1.1);opacity:.7}}
+
+/* Floating tiny leaves */
+.cert-leaf{position:absolute;opacity:.06;animation:leafDrift 12s ease-in-out infinite}
+.cert-leaf:nth-child(2){top:10%;left:10%;width:24px;height:24px;animation-delay:0s}
+.cert-leaf:nth-child(3){top:20%;right:15%;width:18px;height:18px;animation-delay:3s}
+.cert-leaf:nth-child(4){bottom:25%;left:8%;width:20px;height:20px;animation-delay:6s}
+.cert-leaf:nth-child(5){bottom:15%;right:10%;width:16px;height:16px;animation-delay:9s}
+@keyframes leafDrift{0%,100%{transform:translate(0,0) rotate(0deg)}25%{transform:translate(8px,-12px) rotate(15deg)}50%{transform:translate(-5px,-20px) rotate(-10deg)}75%{transform:translate(10px,-8px) rotate(8deg)}}
+
+.cert-w{position:relative;z-index:2;text-align:center;animation:certIn .8s var(--bounce)}
+@keyframes certIn{from{opacity:0;transform:scale(.5) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+/* Multi-layer badge */
+.cert-badge-wrap{margin:0 auto 18px;width:200px;height:200px;perspective:800px}
+.cert-badge{
+  width:200px;height:200px;border-radius:50%;position:relative;
+  transform-style:preserve-3d;
+  animation:badgeSpin 10s ease-in-out infinite;
+}
+@keyframes badgeSpin{0%,100%{transform:rotateY(0) rotateX(0)}20%{transform:rotateY(15deg) rotateX(-5deg)}50%{transform:rotateY(0) rotateX(2deg)}80%{transform:rotateY(-15deg) rotateX(-3deg)}}
+
+/* Outer glow ring */
+.badge-glow{
+  position:absolute;inset:-12px;border-radius:50%;
+  background:conic-gradient(from 0deg,rgba(196,149,48,.0),rgba(245,224,154,.2),rgba(196,149,48,.0),rgba(245,224,154,.15),rgba(196,149,48,.0));
+  animation:glowRot 6s linear infinite;filter:blur(8px);
+}
+@keyframes glowRot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* Gold outer ring */
+.badge-ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 30deg,#A67C28,#F5E09A,#C8A040,#F5E09A,#B8902E,#E8D080,#A67C28);
+  box-shadow:0 4px 24px rgba(166,124,40,.25),inset 0 1px 2px rgba(255,255,255,.3);
+}
+/* Inner gold trim */
+.badge-trim{
+  position:absolute;inset:8px;border-radius:50%;
+  border:1.5px solid rgba(245,224,154,.35);
+}
+/* Dark face */
+.badge-face{
+  position:absolute;inset:10px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 35%,#2A6048,#1C4A34,#143828);
+  box-shadow:inset 0 4px 16px rgba(0,0,0,.35),inset 0 -2px 8px rgba(108,196,158,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+}
+/* Leaf pattern etched in face */
+.badge-face::before{
+  content:'';position:absolute;inset:8px;border-radius:50%;
+  border:1px solid rgba(108,196,158,.08);
+}
+/* Specular sweep */
+.badge-spec{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;
+}
+.badge-spec::before{
+  content:'';position:absolute;top:-60%;left:-60%;width:220%;height:220%;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.08) 46%,rgba(255,255,255,.18) 50%,rgba(255,255,255,.08) 54%,transparent 62%);
+  animation:specSweep 5s ease-in-out infinite;
+}
+@keyframes specSweep{0%,100%{transform:translateX(-90%) rotate(-12deg)}50%{transform:translateX(90%) rotate(-12deg)}}
+
+/* Plant inside badge */
+.badge-plant{position:relative;z-index:3;width:64px;height:64px}
+/* Gold check circle */
+.badge-check{
+  position:relative;z-index:3;
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(145deg,#F5E09A,#C49530,#A67C28);
+  box-shadow:0 2px 8px rgba(166,124,40,.3),inset 0 1px 2px rgba(255,255,255,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;color:#1C4A34;
+  animation:checkPop .5s var(--bounce) .4s both;
+}
+@keyframes checkPop{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0)}}
+
+/* Warm emotional copy */
+.cert-emoji{font-size:28px;margin-bottom:4px;animation:emojiWave 2s ease-in-out infinite}
+@keyframes emojiWave{0%,100%{transform:rotate(0)}25%{transform:rotate(12deg)}75%{transform:rotate(-12deg)}}
+.cert-h{font-size:26px;font-weight:900;color:white;line-height:1.3}
+.cert-sub{font-size:12px;color:rgba(255,255,255,.35);margin-top:4px;letter-spacing:1px}
+.cert-name{font-size:32px;font-weight:900;color:white;margin-top:12px}
+.cert-sp{font-size:13px;color:rgba(108,196,158,.6);margin-top:2px}
+.cert-msg{font-size:13px;color:rgba(255,255,255,.35);margin-top:14px;line-height:1.5;max-width:260px;margin-left:auto;margin-right:auto;font-style:italic}
+.cert-date{margin-top:14px;font-size:11px;color:rgba(255,255,255,.25);font-weight:600}
+.cert-acts{margin-top:20px;display:flex;gap:10px;width:100%}
+.cert-acts .cb{flex:1;padding:14px;border-radius:var(--rl);font-size:14px;font-weight:700;font-family:var(--ff);cursor:pointer;border:none;transition:transform .25s var(--bounce)}.cb:hover{transform:scale(1.04)}.cb:active{transform:scale(.96)}
+
+/* PROFILE */
+#prof{background:var(--bg)}
+.pr-top{padding:54px 22px 20px;text-align:center;flex-shrink:0}
+.pr-av{width:68px;height:68px;border-radius:50%;margin:0 auto;overflow:hidden;background:var(--brand-l);display:flex;align-items:center;justify-content:center}
+.pr-nm{font-size:20px;font-weight:800;color:var(--t1);margin-top:10px}.pr-tl{font-size:12px;color:var(--warm);font-weight:600;margin-top:2px}
+.pr-sts{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.pr-st{padding:8px 16px;border-radius:var(--r);text-align:center;min-width:72px;background:var(--brand-l)}
+.pr-st .n{font-size:18px;font-weight:800;color:var(--brand)}.pr-st .l{font-size:9px;color:var(--t3);margin-top:1px}
+.pr-tabs{display:flex;margin:12px 22px 0;padding:3px;border-radius:var(--r);flex-shrink:0}
+.pr-tab{flex:1;padding:8px 0;border:none;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all .25s var(--bounce);background:none;color:var(--t3)}.pr-tab.on{color:var(--brand);background:var(--brand-l)}
+.pr-ct{flex:1;overflow-y:auto;scrollbar-width:none}.pr-ct::-webkit-scrollbar{display:none}
+.pr-g{padding:12px 22px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pr-c{border-radius:var(--r);overflow:hidden;cursor:pointer;transition:transform .25s var(--bounce);background:var(--card);border:1px solid var(--t5)}.pr-c:hover{transform:translateY(-3px) scale(1.02)}
+.pr-ci{height:95px;display:flex;align-items:center;justify-content:center;background:var(--brand-l)}
+.pr-cn{padding:8px 10px}.pr-cn h4{font-size:13px;font-weight:700;color:var(--t1)}.pr-cn p{font-size:10px;color:var(--t3);margin-top:1px}
+
+/* PUBLISH */
+#pub{background:var(--bg)}.pu-h{padding:54px 22px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0}.pu-h h2{font-size:20px;font-weight:800;color:var(--t1);flex:1}
+.pu-s{flex:1;overflow-y:auto;padding:0 22px 22px;scrollbar-width:none}.pu-s::-webkit-scrollbar{display:none}
+.pu-ph{width:100%;height:160px;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-bottom:16px;border:2px dashed var(--t4);background:var(--card);transition:all .15s}.pu-ph:hover{border-color:var(--brand);background:var(--brand-l)}
+.pu-ph .ic{font-size:36px}.pu-ph p{font-size:13px;color:var(--t3)}.pu-ph .sm{font-size:10px;color:var(--brand)}
+.pu-sec{margin-bottom:14px}.pu-sec label{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:5px;display:block}
+.pu-ch{display:flex;flex-wrap:wrap;gap:6px}
+.pu-cp{padding:8px 14px;border-radius:var(--rl);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--ff);transition:all .2s var(--bounce);background:var(--card);border:1.5px solid var(--t5);color:var(--t2)}.pu-cp:hover,.pu-cp.sel{border-color:var(--brand);color:var(--brand);background:var(--brand-l)}.pu-cp:active{transform:scale(.95)}
+.pu-ai{width:100%;padding:12px;border-radius:var(--r);font-size:13px;font-weight:600;font-family:var(--ff);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--t5);background:var(--card);color:var(--t2);transition:all .15s}.pu-ai:hover{border-color:var(--brand);color:var(--brand)}
+.ai-tpl{margin-top:10px;padding:14px;border-radius:var(--r);background:var(--card);border:1.5px solid var(--brand-l);font-size:13px;color:var(--t2);line-height:1.6;display:none}.ai-tpl.show{display:block}.ai-tpl .ai-tag{display:inline-block;font-size:10px;font-weight:700;color:var(--brand);background:var(--brand-l);padding:2px 8px;border-radius:6px;margin-bottom:8px}
+.pu-sub{width:100%;padding:16px;border-radius:var(--rl);font-size:15px;font-weight:700;font-family:var(--ff);margin-top:4px}
+.cfb{position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden}.cf{position:absolute;top:-20px;animation:cfD 3s linear forwards}@keyframes cfD{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(900px) rotate(720deg);opacity:0}}
+@media(max-width:430px){.phone{width:100vw;height:100vh;border-radius:0;box-shadow:none}.phone::before{display:none}#splash,#cert{min-height:100vh}}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<div class="scr on" id="splash"><div class="sp-orb"></div><div class="sp-orb"></div><div class="sp-w"><div class="sp-bal" id="bal"><div class="sk sk-1"></div><div class="sk sk-2"></div><div class="sk sk-3"></div></div><div class="sp-t">TurnLeaf</div><div class="sp-s">给闲置植物一个新家</div><button class="btn gl sp-btn" onclick="go('main')">开始探索植物 🌱</button></div></div>
+
+<div class="scr" id="main"><div class="m-hdr"><div class="logo">Turn<b>Leaf</b></div><div class="m-icons"><button class="m-ic btn gl" onclick="go('pub')">✏️</button><button class="m-ic btn gl" onclick="go('msg')">💬<span class="dot">3</span></button></div></div><div class="m-cards"><div class="cstk" id="cs"></div></div><div class="m-acts"><button class="act act-p btn gl" onclick="sa('l')">✕</button><button class="act act-l btn gl-s" onclick="sa('r')">💧</button><button class="act act-i btn gl" onclick="showD()">📖</button></div><div class="tbar gl"><button class="tab on" onclick="go('main')"><span class="ti">🏠</span><span class="tl">发现</span></button><button class="tab" onclick="go('msg')"><span class="ti">💬</span><span class="tl">消息</span><span class="td"></span></button><button class="tab" onclick="go('pub')"><span class="ti">📷</span><span class="tl">发布</span></button><button class="tab" onclick="go('prof')"><span class="ti">🌿</span><span class="tl">温室</span></button></div><div id="mp"><div class="mp-w"><div id="mpP" style="margin-bottom:8px"></div><div class="mp-t">匹配成功！</div><div class="mp-s">「大壮」的主人同意了你的领养申请</div><div class="mp-cd"><div id="mpA" style="width:48px;height:48px;overflow:hidden"></div><div><h4>大壮 · 龟背竹</h4><p>距你 2.5km · 健康</p></div></div><div class="mp-bs"><button class="mp-b1 gl-s" onclick="go('chat')">和 TA 聊聊 💬</button><button class="mp-b2" onclick="cmp()">继续逛逛</button></div></div></div></div>
+
+<div class="scr" id="msg"><div class="msg-h"><h2>消息 💌</h2></div><div class="nm"><h3>新匹配</h3><div class="nm-s" id="nms"></div></div><div class="msg-l"><h3>聊天</h3><div class="msg-i" onclick="go('chat')"><div class="msg-av" id="ma1"></div><div class="msg-in"><h4>植物保姆阿花 <span class="tg">🪴 大壮</span></h4><p>太好了！周六下午来我这里自提方便吗？</p></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="msg-t">刚刚</span><span class="msg-d"></span></div></div><div class="msg-i"><div class="msg-av" id="ma2"></div><div class="msg-in"><h4>多肉小王子 <span class="tg">🌸 小粉</span></h4><p>这棵是我养了两年的，有感情了…</p></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="msg-t">2小时前</span></div></div><div class="msg-i"><div class="msg-av" id="ma3"></div><div class="msg-in"><h4>仙人掌爱好者 <span class="tg">🌵 刺刺</span></h4><p>可以邮寄的，我包好泡沫箱 📦</p></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="msg-t">昨天</span></div></div></div><div class="tbar gl"><button class="tab" onclick="go('main')"><span class="ti">🏠</span><span class="tl">发现</span></button><button class="tab on" onclick="go('msg')"><span class="ti">💬</span><span class="tl">消息</span></button><button class="tab" onclick="go('pub')"><span class="ti">📷</span><span class="tl">发布</span></button><button class="tab" onclick="go('prof')"><span class="ti">🌿</span><span class="tl">温室</span></button></div></div>
+
+<div class="scr" id="chat"><div class="ch-top gl"><button class="ch-bk" onclick="go('msg')">←</button><div class="ch-p"><div class="ch-av" id="chA"></div><div><h4>大壮 · 龟背竹</h4><p>植物保姆阿花</p></div></div><button class="ch-cfm btn gl-s" onclick="go('cert')">确认交接 🤝</button></div><div class="ch-ms"><div class="bub th gl-b"><div class="bn">植物保姆阿花</div>你好呀！看到你想领养大壮，太开心了 🥰</div><div class="bub me gl-s">是的！一眼就爱上了，我家有超大落地窗，光照很好～</div><div class="bub th gl-b"><div class="bn">植物保姆阿花</div>完美！大壮最喜欢晒太阳了。它现在很健康，就是我要搬家带不走 😢</div><div class="bub me gl-s">放心交给我！我之前养过琴叶榕，有经验的 💪</div><div class="bub th gl-b"><div class="bn">植物保姆阿花</div>太好了！周六下午来我这里自提方便吗？大壮含盆送出～</div></div><div class="ch-bar gl"><input class="g-input" placeholder="说点什么..." style="flex:1"/><button class="ch-sn btn gl-s">↑</button></div></div>
+
+<!-- CERTIFICATE — emotional celebratory design -->
+<div class="scr" id="cert">
+  <div class="cert-glow"></div>
+  <div class="cert-leaf"><svg viewBox="0 0 24 24" width="24" height="24"><ellipse cx="12" cy="12" rx="10" ry="10" fill="#6CC49E"/></svg></div>
+  <div class="cert-leaf"><svg viewBox="0 0 18 18" width="18" height="18"><ellipse cx="9" cy="9" rx="7" ry="7" fill="#94D9B8"/></svg></div>
+  <div class="cert-leaf"><svg viewBox="0 0 20 20" width="20" height="20"><ellipse cx="10" cy="10" rx="8" ry="8" fill="#5EBC8A"/></svg></div>
+  <div class="cert-leaf"><svg viewBox="0 0 16 16" width="16" height="16"><ellipse cx="8" cy="8" rx="6" ry="6" fill="#A8E0C0"/></svg></div>
+  <div class="cert-w">
+    <div class="cert-badge-wrap">
+      <div class="cert-badge">
+        <div class="badge-glow"></div>
+        <div class="badge-ring"></div>
+        <div class="badge-trim"></div>
+        <div class="badge-face">
+          <div class="badge-plant" id="crtP"></div>
+          <div class="badge-check">✓</div>
+        </div>
+        <div class="badge-spec"></div>
+      </div>
+    </div>
+    <div class="cert-emoji">🎉</div>
+    <div class="cert-h">恭喜，领养成功！</div>
+    <div class="cert-sub">ADOPTION COMPLETE</div>
+    <div class="cert-name">大壮</div>
+    <div class="cert-sp">龟背竹 · Monstera deliciosa</div>
+    <div class="cert-msg">「从今天起，大壮有了新家。<br>愿你们一起晒太阳、一起成长。」</div>
+    <div class="cert-date">2026年3月31日 正式领养</div>
+    <div class="cert-acts">
+      <button class="cb gl" onclick="go('main')" style="color:rgba(255,255,255,.65)">回到首页</button>
+      <button class="cb gl-s" onclick="alert('📸 已保存！')">保存与分享</button>
+    </div>
+  </div>
+</div>
+
+<div class="scr" id="prof"><div class="pr-top"><div class="pr-av" id="prA"></div><div class="pr-nm">落地窗少年</div><div class="pr-tl">🌿 资深植物保姆 · Lv.3</div><div class="pr-sts"><div class="pr-st"><div class="n">5</div><div class="l">领养</div></div><div class="pr-st"><div class="n">2</div><div class="l">送出</div></div><div class="pr-st"><div class="n">3</div><div class="l">心愿单</div></div></div></div><div class="pr-tabs gl" id="prt"><button class="pr-tab on" onclick="spt(0)">我的温室</button><button class="pr-tab" onclick="spt(1)">送出记录</button><button class="pr-tab" onclick="spt(2)">心愿单</button></div><div class="pr-ct"><div class="pr-panel" id="pp0"><div class="pr-g" id="pg0"></div></div><div class="pr-panel" id="pp1" style="display:none"><div class="pr-g" id="pg1"></div></div><div class="pr-panel" id="pp2" style="display:none"><div class="pr-g" id="pg2"></div></div></div><div class="tbar gl"><button class="tab" onclick="go('main')"><span class="ti">🏠</span><span class="tl">发现</span></button><button class="tab" onclick="go('msg')"><span class="ti">💬</span><span class="tl">消息</span></button><button class="tab" onclick="go('pub')"><span class="ti">📷</span><span class="tl">发布</span></button><button class="tab on" onclick="go('prof')"><span class="ti">🌿</span><span class="tl">温室</span></button></div></div>
+
+<div class="scr" id="pub"><div class="pu-h"><button class="ch-bk" onclick="go('main')">←</button><h2>给植物写相亲简历 💌</h2></div><div class="pu-s"><div class="pu-ph"><span class="ic">📸</span><p>拍一张植物的靓照</p><span class="sm">支持拍照或从相册选择</span></div><div class="pu-sec"><label>🌱 植物昵称</label><input class="g-input" placeholder="给它取个好听的名字"/></div><div class="pu-sec"><label>🔍 品种</label><input class="g-input" placeholder="正在智能识别中..." value="龟背竹"/></div><div class="pu-sec"><label>📏 体型</label><div class="pu-ch"><span class="pu-cp" onclick="this.classList.toggle('sel')">🌱 桌面微型</span><span class="pu-cp sel" onclick="this.classList.toggle('sel')">🪴 中型盆栽</span><span class="pu-cp" onclick="this.classList.toggle('sel')">🌳 落地大型</span></div></div><div class="pu-sec"><label>💚 健康度</label><div class="pu-ch"><span class="pu-cp sel" onclick="this.classList.toggle('sel')">😊 很好</span><span class="pu-cp" onclick="this.classList.toggle('sel')">😐 一般</span><span class="pu-cp" onclick="this.classList.toggle('sel')">🆘 极差求救</span></div></div><div class="pu-sec"><label>🚚 交接方式</label><div class="pu-ch"><span class="pu-cp sel" onclick="this.classList.toggle('sel')">🏠 仅限自提</span><span class="pu-cp" onclick="this.classList.toggle('sel')">📦 可邮寄</span><span class="pu-cp" onclick="this.classList.toggle('sel')">👌 都可以</span></div></div><div class="pu-sec"><label>💬 一句话宣言</label><input class="g-input" placeholder="例：前任太忙，求个带落地窗的新家"/></div><div class="pu-sec"><button class="pu-ai" onclick="showAi()">✨ AI一键生成拟人化介绍</button><div class="ai-tpl" id="aiT"><div class="ai-tag">✨ AI 生成</div><div>嗨，我叫大壮，是一棵来自南方的龟背竹 🌿<br><br>前主人说我是「客厅里最有存在感的家伙」，但她要搬去北方了，太冷不适合我。<br><br>我喜欢散射光、偶尔浇水就行，养护难度约等于养一只特别安静的猫 🐱<br><br>希望新家有落地窗，我会用大叶子回报你的！</div></div></div><button class="btn gl-s pu-sub" onclick="pd()">🌱 发布，寻找新家</button></div></div>
+
+<div class="cfb" id="cfb"></div>
+</div>
+
+<script>
+function P(t,s){var z=s||80,h='h'+t+z,d='d'+t+z,H='url(#'+h+')',D='url(#'+d+')',pot='<rect x="30" y="72" width="40" height="20" rx="4" fill="#D4A574"/><rect x="28" y="70" width="44" height="8" rx="4" fill="#E0B88A"/>',df='<defs><radialGradient id="'+h+'" cx="35%" cy="25%"><stop offset="0%" stop-color="white" stop-opacity=".35"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient><filter id="'+d+'"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dy="3"/><feColorMatrix values="0 0 0 0 .1 0 0 0 0 .25 0 0 0 0 .15 0 0 0 .08 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+var o={
+monstera:df+'<g filter="'+D+'">'+pot+'<rect x="47" y="48" width="6" height="26" rx="3" fill="#4A9070"/><path d="M28 32Q22 16 38 10Q52 6 56 18Q60 30 50 38Q40 46 28 32Z" fill="#4BA67A"/><path d="M28 32Q22 16 38 10Q52 6 56 18Q60 30 50 38Q40 46 28 32Z" fill="'+H+'"/><path d="M55 25Q62 12 72 18Q82 24 76 38Q70 50 58 44Q48 38 55 25Z" fill="#6CC49E"/><path d="M55 25Q62 12 72 18Q82 24 76 38Q70 50 58 44Q48 38 55 25Z" fill="'+H+'"/><path d="M38 40Q32 36 26 42Q20 50 30 56Q38 60 44 52Q48 44 38 40Z" fill="#94D9B8"/><path d="M38 40Q32 36 26 42Q20 50 30 56Q38 60 44 52Q48 44 38 40Z" fill="'+H+'"/></g>',
+cactus:df+'<g filter="'+D+'">'+pot+'<path d="M38 70Q36 50 36 38Q36 18 50 14Q64 18 64 38Q64 50 62 70Z" fill="#6CC49E"/><path d="M38 70Q36 50 36 38Q36 18 50 14Q64 18 64 38Q64 50 62 70Z" fill="'+H+'"/><path d="M36 52Q32 50 26 52Q18 55 18 48Q18 42 24 42Q30 42 34 48Z" fill="#6CC49E"/><path d="M36 52Q32 50 26 52Q18 55 18 48Q18 42 24 42Q30 42 34 48Z" fill="'+H+'"/><path d="M64 40Q68 38 74 34Q80 30 82 22Q84 14 78 14Q72 14 70 22Q68 30 66 36Z" fill="#6CC49E"/><path d="M64 40Q68 38 74 34Q80 30 82 22Q84 14 78 14Q72 14 70 22Q68 30 66 36Z" fill="'+H+'"/><circle cx="48" cy="12" r="4.5" fill="#FFB7C5"/><circle cx="51" cy="10" r="3" fill="#FF9AB0"/></g>',
+flower:df+'<g filter="'+D+'">'+pot+'<path d="M48 50Q47 65 48 72" stroke="#4A9070" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="34" cy="56" rx="14" ry="8" fill="#6CC49E" transform="rotate(-15 34 56)"/><ellipse cx="64" cy="54" rx="12" ry="7" fill="#94D9B8" transform="rotate(10 64 54)"/><circle cx="50" cy="30" r="10" fill="#FFB7C5"/><circle cx="41" cy="25" r="9" fill="#FFA0B4"/><circle cx="59" cy="25" r="9" fill="#FFA0B4"/><circle cx="44" cy="37" r="9" fill="#FF8FA8"/><circle cx="56" cy="37" r="9" fill="#FF8FA8"/><circle cx="50" cy="30" r="5.5" fill="#FFD93D"/></g>',
+sunflower:df+'<g filter="'+D+'">'+pot+'<path d="M48 46Q47 62 48 72" stroke="#4A9070" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="32" cy="58" rx="16" ry="8" fill="#6CC49E" transform="rotate(-12 32 58)"/><g transform="translate(50,30)"><ellipse rx="7" ry="15" fill="#FFD93D"/><ellipse rx="7" ry="15" fill="#FFD93D" transform="rotate(36)"/><ellipse rx="7" ry="15" fill="#FFD93D" transform="rotate(72)"/><ellipse rx="7" ry="15" fill="#FFD93D" transform="rotate(108)"/><ellipse rx="7" ry="15" fill="#FFD93D" transform="rotate(144)"/></g><circle cx="50" cy="30" r="9" fill="#8B6914"/></g>',
+bamboo:df+'<g filter="'+D+'">'+pot+'<rect x="42" y="14" width="14" height="60" rx="7" fill="#94D9B8"/><rect x="42" y="14" width="14" height="60" rx="7" fill="'+H+'"/><rect x="42" y="30" width="14" height="3" rx="1.5" fill="#6CC49E" opacity=".4"/><ellipse cx="30" cy="24" rx="14" ry="5" fill="#6CC49E" transform="rotate(-25 30 24)"/><ellipse cx="70" cy="18" rx="16" ry="5" fill="#4BA67A" transform="rotate(18 70 18)"/></g>',
+sprout:df+'<g filter="'+D+'"><rect x="47" y="50" width="6" height="28" rx="3" fill="#4A9070"/><ellipse cx="38" cy="34" rx="18" ry="24" fill="#94D9B8" transform="rotate(-12 38 34)"/><ellipse cx="38" cy="34" rx="18" ry="24" fill="'+H+'" transform="rotate(-12 38 34)"/><ellipse cx="62" cy="36" rx="16" ry="22" fill="#6CC49E" transform="rotate(10 62 36)"/><ellipse cx="62" cy="36" rx="16" ry="22" fill="'+H+'" transform="rotate(10 62 36)"/></g>',
+person:df+'<g filter="'+D+'"><circle cx="50" cy="36" r="20" fill="#F2D5A8"/><circle cx="43" cy="33" r="2.5" fill="#5C5549"/><circle cx="57" cy="33" r="2.5" fill="#5C5549"/><path d="M45 41Q50 45 55 41" stroke="#5C5549" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="74" rx="22" ry="18" fill="#6CC49E"/><ellipse cx="38" cy="22" rx="9" ry="5" fill="#94D9B8" transform="rotate(-25 38 22)"/><ellipse cx="62" cy="22" rx="9" ry="5" fill="#94D9B8" transform="rotate(25 62 22)"/></g>',
+clover:df+'<g filter="'+D+'"><rect x="48" y="50" width="4" height="26" rx="2" fill="#4A9070"/><circle cx="40" cy="34" r="13" fill="#94D9B8"/><circle cx="60" cy="34" r="13" fill="#6CC49E"/><circle cx="50" cy="22" r="13" fill="#4BA67A"/><circle cx="50" cy="42" r="9" fill="#94D9B8"/><circle cx="40" cy="34" r="13" fill="'+H+'"/><circle cx="60" cy="34" r="13" fill="'+H+'"/><circle cx="50" cy="22" r="13" fill="'+H+'"/></g>'
+};return '<svg viewBox="0 0 100 100" width="'+z+'" height="'+z+'" xmlns="http://www.w3.org/2000/svg">'+(o[t]||o.monstera)+'</svg>'}
+function buildBal(){
+  var el=document.getElementById('bal'),cx=130,cy=210;
+  var lv=[{x:18,y:15,rx:52,ry:56,fill:'#5EBC8A',cls:'bl-1'},{x:185,y:8,rx:48,ry:52,fill:'#6CC49E',cls:'bl-2'},{x:105,y:-10,rx:38,ry:45,fill:'#94D9B8',cls:'bl-3'},{x:30,y:105,rx:30,ry:26,fill:'#7CCAA8',cls:'bl-4'},{x:190,y:100,rx:28,ry:24,fill:'#A8E0C0',cls:'bl-5'}];
+  var html='<svg style="position:absolute;inset:0;pointer-events:none" viewBox="0 0 260 240">';
+  lv.forEach(function(l){var lx=l.x+l.rx,ly=l.y+l.ry;html+='<path d="M'+cx+' '+cy+' Q'+((lx+cx)/2)+' '+((ly+cy)/2+15)+' '+lx+' '+ly+'" stroke="rgba(255,255,255,.12)" stroke-width="1.5" fill="none"/>'});
+  html+='</svg>';
+  lv.forEach(function(l){var svg='<svg viewBox="0 0 '+(l.rx*2)+' '+(l.ry*2)+'" width="'+(l.rx*2)+'" height="'+(l.ry*2)+'" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="blg" cx="38%" cy="22%"><stop offset="0%" stop-color="white" stop-opacity=".38"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><ellipse cx="'+l.rx+'" cy="'+l.ry+'" rx="'+(l.rx-2)+'" ry="'+(l.ry-2)+'" fill="'+l.fill+'"/><ellipse cx="'+l.rx+'" cy="'+l.ry+'" rx="'+(l.rx-2)+'" ry="'+(l.ry-2)+'" fill="url(#blg)"/>';if(l.rx>35){svg+='<ellipse cx="'+(l.rx-14)+'" cy="'+(l.ry-10)+'" rx="'+(l.rx*.15)+'" ry="'+(l.ry*.2)+'" fill="rgba(0,60,30,.1)"/><ellipse cx="'+(l.rx+12)+'" cy="'+(l.ry-14)+'" rx="'+(l.rx*.12)+'" ry="'+(l.ry*.16)+'" fill="rgba(0,60,30,.07)"/>'};svg+='<line x1="'+l.rx+'" y1="'+(l.ry*.15)+'" x2="'+l.rx+'" y2="'+(l.ry*1.8)+'" stroke="rgba(0,60,30,.1)" stroke-width="1.5" stroke-linecap="round"/></svg>';html+='<div class="bl '+l.cls+'" style="left:'+l.x+'px;top:'+l.y+'px">'+svg+'</div>'});
+  html+='<svg style="position:absolute;bottom:0;left:50%;transform:translateX(-50%)" viewBox="0 0 90 36" width="90" height="36"><path d="M12 8 L8 32 Q8 36 16 36 L74 36 Q82 36 82 32 L78 8Z" fill="#D4A574"/><rect x="6" y="0" width="78" height="12" rx="4" fill="#E0B88A"/><rect x="12" y="2" width="66" height="4" rx="2" fill="#EDCFA6" opacity=".35"/></svg>';
+  el.innerHTML=html}
+function sP(id,t,sz){var e=document.getElementById(id);if(e)e.innerHTML=P(t,sz)}
+var D=[
+  {n:'大壮',s:'龟背竹',d:'2.5km',ok:1,tg:[{t:'#喜光',c:'g'},{t:'#带盆送',c:'o'},{t:'#自提',c:'b'}],q:'前任太忙，求个带落地窗的新家。',df:2,bg:'linear-gradient(150deg,#E8F6EE,#D0EDDA,#B0DEC0)',p:'monstera'},
+  {n:'刺刺',s:'金琥仙人球',d:'800m',ok:1,tg:[{t:'#耐旱水牛',c:'g'},{t:'#新手友好',c:'o'},{t:'#可邮寄',c:'b'}],q:'三个月没浇水照样精神，求一个不卷的家。',df:1,bg:'linear-gradient(150deg,#FFF6E8,#F2DDB8,#E8C898)',p:'cactus'},
+  {n:'小粉',s:'粉掌',d:'5.2km',ok:0,tg:[{t:'#残血求救',c:'o'},{t:'#喜湿',c:'g'},{t:'#需要爱',c:'o'}],q:'叶子黄了几片，但我还能抢救！求高手接盘。',df:3,bg:'linear-gradient(150deg,#FFE8F0,#F8C8D8,#F0B0C0)',p:'flower'},
+  {n:'向阳',s:'向日葵',d:'1.1km',ok:1,tg:[{t:'#阳台党',c:'g'},{t:'#带花苞',c:'o'},{t:'#自提',c:'b'}],q:'我会追着太阳转，你只需要给我个阳台。',df:2,bg:'linear-gradient(150deg,#FFFAE8,#FFE8A8,#FFD87A)',p:'sunflower'},
+  {n:'翠翠',s:'文竹',d:'3.8km',ok:1,tg:[{t:'#文艺气质',c:'g'},{t:'#桌面小型',c:'o'},{t:'#都可以',c:'b'}],q:'适合摆在书桌上，陪你写代码到深夜。',df:2,bg:'linear-gradient(150deg,#EAF4F8,#D0E4EE,#B8D4E0)',p:'bamboo'},
+];
+var ci=0,dr=false,sx=0,cx=0,Q=function(s){return document.querySelector(s)};
+function init(){buildBal();sP('mpP','sprout',80);sP('mpA','monstera',48);sP('crtP','monstera',60);sP('prA','person',60);sP('chA','monstera',26);sP('ma1','monstera',26);sP('ma2','flower',26);sP('ma3','cactus',26);
+var nd=[{n:'大壮',p:'monstera'},{n:'小粉',p:'flower'},{n:'刺刺',p:'cactus'},{n:'向阳',p:'sunflower'},{n:'Lucky',p:'clover'}];var ne=document.getElementById('nms');nd.forEach(function(d,i){var div=document.createElement('div');div.className='nm-b';if(i===0)div.setAttribute('onclick',"go('chat')");div.innerHTML='<div class="nm-bi">'+P(d.p,30)+'</div><div class="nm-bn">'+d.n+'</div>';ne.appendChild(div)});
+fG('pg0',[{n:'大壮',p:'monstera',t:'龟背竹 · 3天前'},{n:'小粉',p:'flower',t:'粉掌 · 2周前'},{n:'绿绒',p:'sprout',t:'绿萝 · 1月前'},{n:'竹竹',p:'bamboo',t:'富贵竹 · 2月前'},{n:'向阳',p:'sunflower',t:'向日葵 · 3月前'}]);
+fG('pg1',[{n:'胖虎',p:'cactus',t:'仙人球 · 送出1周前'},{n:'小翠',p:'sprout',t:'绿萝 · 送出3周前'}]);
+fG('pg2',[{n:'琴叶榕',p:'monstera',t:'等待主人通过'},{n:'多肉拼盘',p:'flower',t:'等待主人通过'},{n:'天堂鸟',p:'bamboo',t:'等待主人通过'}])}
+function fG(id,items){var el=document.getElementById(id);items.forEach(function(it){var c=document.createElement('div');c.className='pr-c';c.innerHTML='<div class="pr-ci">'+P(it.p,44)+'</div><div class="pr-cn"><h4>'+it.n+'</h4><p>'+it.t+'</p></div>';el.appendChild(c)})}
+function spt(idx){var ts=document.querySelectorAll('#prt .pr-tab'),ps=document.querySelectorAll('.pr-panel');for(var i=0;i<ts.length;i++){ts[i].classList.toggle('on',i===idx);ps[i].style.display=i===idx?'block':'none'}}
+function rc(){var s=document.getElementById('cs');if(!s)return;s.innerHTML='';for(var i=Math.min(ci+2,D.length-1);i>=ci;i--){if(i>=D.length)continue;var p=D[i],fr=i===ci,off=i-ci;var c=document.createElement('div');c.className='cd '+(fr?'front':off===1?'bk1':'bk2');var tgs='';for(var j=0;j<p.tg.length;j++)tgs+='<span class="tag tag-'+p.tg[j].c+'">'+p.tg[j].t+'</span>';var pips='';for(var k=0;k<5;k++)pips+='<div class="dfd '+(k<p.df?'on':'')+'"></div>';c.innerHTML='<div class="cd-vis"><div class="cd-bg" style="background:'+p.bg+'"></div><div class="cd-pw">'+P(p.p,110)+'</div><div class="cd-pill gl cd-dist">📍 '+p.d+'</div><div class="cd-pill gl cd-hp '+(p.ok?'ok':'sos')+'">'+(p.ok?'💚 健康':'🆘 濒危')+'</div></div><div class="swl lk">想领养</div><div class="swl np">Pass</div><div class="cd-body"><div style="display:flex;align-items:baseline"><span class="cd-nm">'+p.n+'</span><span class="cd-sp">'+p.s+'</span></div><div class="cd-tags">'+tgs+'</div><div class="cd-q">'+p.q+'</div><div class="cd-df">养护难度<div class="dfb">'+pips+'</div></div></div>';if(fr){c.addEventListener('mousedown',dS);c.addEventListener('touchstart',dS,{passive:true})}s.appendChild(c)}}
+function dS(e){dr=true;sx=e.type==='touchstart'?e.touches[0].clientX:e.clientX;cx=0;var c=Q('.cd.front');if(c)c.style.transition='none';document.addEventListener('mousemove',dM);document.addEventListener('mouseup',dE);document.addEventListener('touchmove',dM,{passive:true});document.addEventListener('touchend',dE)}
+function dM(e){if(!dr)return;var x=e.type==='touchmove'?e.touches[0].clientX:e.clientX;cx=x-sx;var c=Q('.cd.front');if(!c)return;c.style.transform='translateX('+cx+'px) rotate('+(cx*.05)+'deg)';var lk=c.querySelector('.swl.lk'),np=c.querySelector('.swl.np');if(cx>40){lk.classList.add('show');np.classList.remove('show')}else if(cx<-40){np.classList.add('show');lk.classList.remove('show')}else{lk.classList.remove('show');np.classList.remove('show')}}
+function dE(){dr=false;document.removeEventListener('mousemove',dM);document.removeEventListener('mouseup',dE);document.removeEventListener('touchmove',dM);document.removeEventListener('touchend',dE);var c=Q('.cd.front');if(!c)return;c.style.transition='transform .5s var(--bounce),opacity .5s';if(cx>100)fO(c,'r');else if(cx<-100)fO(c,'l');else{c.style.transform='';c.querySelector('.swl.lk').classList.remove('show');c.querySelector('.swl.np').classList.remove('show')}}
+function fO(c,d){var m=d==='r'?1:-1;c.style.transition='transform .4s ease-out,opacity .4s';c.style.transform='translateX('+(m*500)+'px) rotate('+(m*25)+'deg)';c.style.opacity='0';setTimeout(function(){if(d==='r'&&ci===0)sm();ci++;if(ci<D.length)rc()},350)}
+function sa(d){var c=Q('.cd.front');if(!c)return;(d==='r'?c.querySelector('.swl.lk'):c.querySelector('.swl.np')).classList.add('show');setTimeout(function(){fO(c,d)},150)}
+function showD(){alert('展开「植物日记」')}
+function sm(){document.getElementById('mp').classList.add('show');boom()}
+function cmp(){document.getElementById('mp').classList.remove('show')}
+function showAi(){document.getElementById('aiT').classList.toggle('show')}
+function boom(){var b=document.getElementById('cfb');b.innerHTML='';var cols=['#3B9B6C','#6CC49E','#F2A94B','#FFB7C5','#C4EDCF','#74B9FF','#FFD93D'];for(var i=0;i<45;i++){var p=document.createElement('div');p.className='cf';p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*1.5+'s';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.background=cols[Math.floor(Math.random()*cols.length)];p.style.borderRadius=Math.random()>.5?'50%':'2px';var sz=5+Math.random()*8;p.style.width=sz+'px';p.style.height=sz+'px';b.appendChild(p)}setTimeout(function(){b.innerHTML=''},4000)}
+function go(id){cmp();var all=document.querySelectorAll('.scr');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(id).classList.add('on');if(id==='cert')setTimeout(boom,300)}
+function pd(){alert('发布成功！');go('main')}
+rc();init();
+</script>
+</body>
+</html>
