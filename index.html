@@ -20,9 +20,9 @@
   --ff:'Nunito','Noto Sans SC',sans-serif;
   --bounce:cubic-bezier(.2,1.4,.4,1);
 }
-html{background:#1A4A32;height:100%}
-body{margin:0;height:100%;background:var(--bg);font-family:var(--ff);overflow:hidden;user-select:none;overscroll-behavior:none}
-.phone{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+html,body{margin:0;padding:0;width:100%;height:100%;background:#1A4A32;overflow:hidden;-webkit-text-size-adjust:100%}
+body{font-family:var(--ff);user-select:none;-webkit-user-select:none;overscroll-behavior:none;position:fixed;inset:0}
+.phone{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;background:var(--bg)}
 .phone::before{display:none}
 .scr{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}.scr.on{display:flex}
 .gl{background:linear-gradient(135deg,rgba(255,255,255,.38),rgba(255,255,255,.12));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.40);box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,255,255,.08)}
@@ -127,7 +127,7 @@ body{margin:0;height:100%;background:var(--bg);font-family:var(--ff);overflow:hi
 /* ====== CERTIFICATE — emotional, celebratory ====== */
 #cert{
   background:radial-gradient(ellipse at 50% 40%,#1E5A3E 0%,#14402C 40%,#0D2E1E 80%,#081A12 100%);
-  min-height:100vh;justify-content:center;align-items:center;padding:24px;position:relative;overflow:hidden;
+  justify-content:center;align-items:center;padding:24px;overflow:hidden;
 }
 /* Warm ambient glow behind badge */
 .cert-glow{
@@ -254,7 +254,6 @@ body{margin:0;height:100%;background:var(--bg);font-family:var(--ff);overflow:hi
 .ai-tpl{margin-top:10px;padding:14px;border-radius:var(--r);background:var(--card);border:1.5px solid var(--brand-l);font-size:13px;color:var(--t2);line-height:1.6;display:none}.ai-tpl.show{display:block}.ai-tpl .ai-tag{display:inline-block;font-size:10px;font-weight:700;color:var(--brand);background:var(--brand-l);padding:2px 8px;border-radius:6px;margin-bottom:8px}
 .pu-sub{width:100%;padding:16px;border-radius:var(--rl);font-size:15px;font-weight:700;font-family:var(--ff);margin-top:4px}
 .cfb{position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden}.cf{position:absolute;top:-20px;animation:cfD 3s linear forwards}@keyframes cfD{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(900px) rotate(720deg);opacity:0}}
-@media(max-width:430px){#splash,#cert{min-height:100vh}}
 </style>
 </head>
 <body>
@@ -367,6 +366,20 @@ function boom(){var b=document.getElementById('cfb');b.innerHTML='';var cols=['#
 function go(id){cmp();var all=document.querySelectorAll('.scr');for(var i=0;i<all.length;i++)all[i].classList.remove('on');document.getElementById(id).classList.add('on');if(id==='cert')setTimeout(boom,300)}
 function pd(){alert('发布成功！');go('main')}
 rc();init();
+// iOS PWA full-screen fix
+(function(){
+  function fixH(){
+    var h=window.innerHeight;
+    // In iOS standalone PWA, screen.height is the true physical screen CSS pixels
+    if(window.navigator.standalone&&screen.height>h) h=screen.height;
+    document.body.style.height=h+'px';
+    var p=document.querySelector('.phone');
+    if(p) p.style.height=h+'px';
+  }
+  fixH();
+  window.addEventListener('resize',fixH);
+  window.addEventListener('orientationchange',function(){setTimeout(fixH,150)});
+})();
 </script>
 </body>
 </html>
