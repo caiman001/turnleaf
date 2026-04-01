@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>TurnLeaf</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
@@ -16,9 +18,9 @@
   --ff:'Nunito','Noto Sans SC',sans-serif;
   --bounce:cubic-bezier(.2,1.4,.4,1);
 }
-html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user-select:none}
-.phone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:393px;height:852px;border-radius:50px;overflow:hidden;box-shadow:0 0 0 4px #1a1a1a,0 0 80px rgba(0,0,0,.5);background:var(--bg)}
-.phone::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:126px;height:36px;background:#111;border-radius:0 0 20px 20px;z-index:9999}
+html,body{height:100%;background:var(--bg);font-family:var(--ff);overflow:hidden;user-select:none}
+.phone{position:fixed;inset:0;width:100%;height:100%;border-radius:0;overflow:hidden;background:var(--bg)}
+.phone::before{display:none}
 .scr{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}.scr.on{display:flex}
 .gl{background:linear-gradient(135deg,rgba(255,255,255,.38),rgba(255,255,255,.12));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.40);box-shadow:0 2px 12px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(255,255,255,.08)}
 .gl-s{background:linear-gradient(135deg,rgba(59,155,108,.75),rgba(108,196,158,.65));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.20);box-shadow:0 4px 18px rgba(59,155,108,.20),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.05);color:white}
@@ -27,7 +29,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .g-input{width:100%;padding:12px 16px;border-radius:var(--r);font-size:13px;font-family:var(--ff);outline:none;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.25));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35);transition:border-color .2s}.g-input:focus{border-color:var(--brand)}.g-input::placeholder{color:var(--t4)}
 
 /* SPLASH */
-#splash{background:linear-gradient(165deg,#1A4A32 0%,#2A7050 30%,var(--brand) 60%,#6CC49E 85%,#A8E0C0 100%);min-height:852px;justify-content:center;align-items:center;position:relative}
+#splash{background:linear-gradient(165deg,#1A4A32 0%,#2A7050 30%,var(--brand) 60%,#6CC49E 85%,#A8E0C0 100%);min-height:100vh;justify-content:center;align-items:center;position:relative}
 .sp-orb{position:absolute;border-radius:50%;opacity:.06;animation:orbF 16s ease-in-out infinite}
 .sp-orb:nth-child(1){width:200px;height:200px;top:-40px;right:-50px;background:white}
 .sp-orb:nth-child(2){width:130px;height:130px;bottom:100px;left:-30px;background:var(--warm);animation-delay:5s}
@@ -55,7 +57,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 
 /* MAIN */
 #main{background:var(--bg)}
-.m-hdr{padding:54px 20px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.m-hdr{padding:calc(env(safe-area-inset-top,20px) + 20px) 20px 8px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 .logo{font-size:26px;font-weight:900;color:var(--brand-d)}.logo b{color:var(--warm)}
 .m-icons{display:flex;gap:8px}
 .m-ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;position:relative}
@@ -83,7 +85,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .m-acts{padding:10px 0 4px;display:flex;justify-content:center;align-items:center;gap:16px;flex-shrink:0}
 .act{border-radius:50%;display:flex;align-items:center;justify-content:center}
 .act-p{width:52px;height:52px;font-size:20px;color:var(--t3)}.act-l{width:68px;height:68px;font-size:28px}.act-i{width:42px;height:42px;font-size:16px;color:var(--t3)}
-.tbar{display:flex;margin:6px 18px 24px;padding:3px;border-radius:var(--r2);flex-shrink:0}
+.tbar{display:flex;margin:6px 18px calc(env(safe-area-inset-bottom,8px) + 10px);padding:3px;border-radius:var(--r2);flex-shrink:0}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:none;background:none;cursor:pointer;border-radius:16px;transition:all .25s var(--bounce);font-family:var(--ff);position:relative}
 .tab .ti{font-size:18px;opacity:.25;transition:opacity .2s}.tab .tl{font-size:9px;color:var(--t3);font-weight:600}
 .tab.on{background:rgba(59,155,108,.10)}.tab.on .ti{opacity:1}.tab.on .tl{color:var(--brand-d);font-weight:700}
@@ -97,7 +99,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .mp-b1{padding:14px;border-radius:var(--rl);font-size:15px;font-weight:700;cursor:pointer;font-family:var(--ff);border:none;transition:transform .25s var(--bounce)}.mp-b1:hover{transform:scale(1.04)}.mp-b1:active{transform:scale(.96)}
 .mp-b2{padding:12px;border-radius:var(--rl);font-size:14px;font-weight:500;background:transparent;border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);cursor:pointer;font-family:var(--ff)}
 /* MSG */
-#msg{background:var(--bg)}.msg-h{padding:54px 22px 14px;flex-shrink:0}.msg-h h2{font-size:26px;font-weight:900;color:var(--t1)}
+#msg{background:var(--bg)}.msg-h{padding:calc(env(safe-area-inset-top,20px) + 20px) 22px 14px;flex-shrink:0}.msg-h h2{font-size:26px;font-weight:900;color:var(--t1)}
 .nm{padding:0 22px;margin-bottom:14px;flex-shrink:0}.nm h3{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
 .nm-s{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none}.nm-s::-webkit-scrollbar{display:none}
 .nm-b{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex-shrink:0}
@@ -110,19 +112,19 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .msg-t{font-size:10px;color:var(--t3);flex-shrink:0}.msg-d{width:8px;height:8px;background:var(--brand);border-radius:50%;flex-shrink:0}
 /* CHAT */
 #chat{background:var(--bg)}
-.ch-top{padding:50px 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ch-top{padding:calc(env(safe-area-inset-top,20px) + 16px) 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .ch-bk{width:32px;height:32px;border:none;background:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .ch-p{display:flex;align-items:center;gap:8px;flex:1}.ch-p .ch-av{width:32px;height:32px;border-radius:10px;overflow:hidden;background:var(--brand-l);display:flex;align-items:center;justify-content:center}.ch-p h4{font-size:14px;font-weight:700;color:var(--t1)}.ch-p p{font-size:10px;color:var(--t3)}
 .ch-cfm{padding:7px 14px;border-radius:10px;font-size:11px;font-weight:700;font-family:var(--ff)}
 .ch-ms{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;scrollbar-width:none}.ch-ms::-webkit-scrollbar{display:none}
 .bub{max-width:75%;padding:11px 15px;border-radius:var(--r2);font-size:13px;line-height:1.55}.bub.th{align-self:flex-start;border-bottom-left-radius:4px;color:var(--t1)}.bub.me{align-self:flex-end;border-bottom-right-radius:4px}.bub .bn{font-size:10px;font-weight:700;color:var(--warm);margin-bottom:2px}
-.ch-bar{padding:10px 14px 30px;display:flex;gap:8px;flex-shrink:0}
+.ch-bar{padding:10px 14px calc(env(safe-area-inset-bottom,8px) + 16px);display:flex;gap:8px;flex-shrink:0}
 .ch-sn{width:40px;height:40px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center}
 
 /* ====== CERTIFICATE — emotional, celebratory ====== */
 #cert{
   background:radial-gradient(ellipse at 50% 40%,#1E5A3E 0%,#14402C 40%,#0D2E1E 80%,#081A12 100%);
-  min-height:852px;justify-content:center;align-items:center;padding:24px;position:relative;overflow:hidden;
+  min-height:100vh;justify-content:center;align-items:center;padding:24px;position:relative;overflow:hidden;
 }
 /* Warm ambient glow behind badge */
 .cert-glow{
@@ -223,7 +225,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 
 /* PROFILE */
 #prof{background:var(--bg)}
-.pr-top{padding:54px 22px 20px;text-align:center;flex-shrink:0}
+.pr-top{padding:calc(env(safe-area-inset-top,20px) + 20px) 22px 20px;text-align:center;flex-shrink:0}
 .pr-av{width:68px;height:68px;border-radius:50%;margin:0 auto;overflow:hidden;background:var(--brand-l);display:flex;align-items:center;justify-content:center}
 .pr-nm{font-size:20px;font-weight:800;color:var(--t1);margin-top:10px}.pr-tl{font-size:12px;color:var(--warm);font-weight:600;margin-top:2px}
 .pr-sts{display:flex;gap:8px;justify-content:center;margin-top:14px}
@@ -238,7 +240,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .pr-cn{padding:8px 10px}.pr-cn h4{font-size:13px;font-weight:700;color:var(--t1)}.pr-cn p{font-size:10px;color:var(--t3);margin-top:1px}
 
 /* PUBLISH */
-#pub{background:var(--bg)}.pu-h{padding:54px 22px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0}.pu-h h2{font-size:20px;font-weight:800;color:var(--t1);flex:1}
+#pub{background:var(--bg)}.pu-h{padding:calc(env(safe-area-inset-top,20px) + 20px) 22px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0}.pu-h h2{font-size:20px;font-weight:800;color:var(--t1);flex:1}
 .pu-s{flex:1;overflow-y:auto;padding:0 22px 22px;scrollbar-width:none}.pu-s::-webkit-scrollbar{display:none}
 .pu-ph{width:100%;height:160px;border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-bottom:16px;border:2px dashed var(--t4);background:var(--card);transition:all .15s}.pu-ph:hover{border-color:var(--brand);background:var(--brand-l)}
 .pu-ph .ic{font-size:36px}.pu-ph p{font-size:13px;color:var(--t3)}.pu-ph .sm{font-size:10px;color:var(--brand)}
@@ -249,7 +251,7 @@ html,body{height:100%;background:#111;font-family:var(--ff);overflow:hidden;user
 .ai-tpl{margin-top:10px;padding:14px;border-radius:var(--r);background:var(--card);border:1.5px solid var(--brand-l);font-size:13px;color:var(--t2);line-height:1.6;display:none}.ai-tpl.show{display:block}.ai-tpl .ai-tag{display:inline-block;font-size:10px;font-weight:700;color:var(--brand);background:var(--brand-l);padding:2px 8px;border-radius:6px;margin-bottom:8px}
 .pu-sub{width:100%;padding:16px;border-radius:var(--rl);font-size:15px;font-weight:700;font-family:var(--ff);margin-top:4px}
 .cfb{position:absolute;inset:0;pointer-events:none;z-index:200;overflow:hidden}.cf{position:absolute;top:-20px;animation:cfD 3s linear forwards}@keyframes cfD{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(900px) rotate(720deg);opacity:0}}
-@media(max-width:430px){.phone{width:100vw;height:100vh;border-radius:0;box-shadow:none}.phone::before{display:none}#splash,#cert{min-height:100vh}}
+@media(max-width:430px){#splash,#cert{min-height:100vh}}
 </style>
 </head>
 <body>
@@ -332,6 +334,13 @@ var D=[
   {n:'小粉',s:'粉掌',d:'5.2km',ok:0,tg:[{t:'#残血求救',c:'o'},{t:'#喜湿',c:'g'},{t:'#需要爱',c:'o'}],q:'叶子黄了几片，但我还能抢救！求高手接盘。',df:3,bg:'linear-gradient(150deg,#FFE8F0,#F8C8D8,#F0B0C0)',p:'flower'},
   {n:'向阳',s:'向日葵',d:'1.1km',ok:1,tg:[{t:'#阳台党',c:'g'},{t:'#带花苞',c:'o'},{t:'#自提',c:'b'}],q:'我会追着太阳转，你只需要给我个阳台。',df:2,bg:'linear-gradient(150deg,#FFFAE8,#FFE8A8,#FFD87A)',p:'sunflower'},
   {n:'翠翠',s:'文竹',d:'3.8km',ok:1,tg:[{t:'#文艺气质',c:'g'},{t:'#桌面小型',c:'o'},{t:'#都可以',c:'b'}],q:'适合摆在书桌上，陪你写代码到深夜。',df:2,bg:'linear-gradient(150deg,#EAF4F8,#D0E4EE,#B8D4E0)',p:'bamboo'},
+  {n:'球球',s:'多肉拼盘',d:'1.5km',ok:1,tg:[{t:'#萌系',c:'g'},{t:'#迷你',c:'o'},{t:'#可邮寄',c:'b'}],q:'我们是一盘六口之家，希望不要被拆散。',df:1,bg:'linear-gradient(150deg,#F0E8F6,#E0D0F0,#D0B8E8)',p:'clover'},
+  {n:'老绿',s:'绿萝',d:'500m',ok:1,tg:[{t:'#生命力强',c:'g'},{t:'#垂吊型',c:'o'},{t:'#自提',c:'b'}],q:'我从书架上垂下来两米长，很壮观的。',df:1,bg:'linear-gradient(150deg,#E8F6E8,#C8EDCA,#A8DEB0)',p:'sprout'},
+  {n:'阿花',s:'蝴蝶兰',d:'3.2km',ok:1,tg:[{t:'#开花中',c:'o'},{t:'#喜温暖',c:'g'},{t:'#仅自提',c:'b'}],q:'正在开花期，搬家怕颠坏，求稳妥的新主人。',df:3,bg:'linear-gradient(150deg,#FFF0F4,#F8D8E0,#F0C0D0)',p:'flower'},
+  {n:'竹子',s:'富贵竹',d:'2.0km',ok:1,tg:[{t:'#水培',c:'g'},{t:'#好养活',c:'o'},{t:'#可邮寄',c:'b'}],q:'插水里就能活，适合经常出差的你。',df:1,bg:'linear-gradient(150deg,#E8F8E8,#C0ECC8,#98DCA8)',p:'bamboo'},
+  {n:'胖虎',s:'虎皮兰',d:'4.1km',ok:1,tg:[{t:'#净化空气',c:'g'},{t:'#耐阴',c:'o'},{t:'#都可以',c:'b'}],q:'我能净化甲醛，适合刚搬新家的你。',df:1,bg:'linear-gradient(150deg,#F0F6E0,#D8ECBE,#C0E0A0)',p:'sprout'},
+  {n:'小太阳',s:'太阳花',d:'1.8km',ok:1,tg:[{t:'#全日照',c:'g'},{t:'#带花盆',c:'o'},{t:'#自提',c:'b'}],q:'只要有太阳我就灿烂，超级好养！',df:1,bg:'linear-gradient(150deg,#FFF8E0,#FFE8A0,#FFD878)',p:'sunflower'},
+  {n:'幸运',s:'四叶草',d:'600m',ok:1,tg:[{t:'#好运',c:'g'},{t:'#迷你',c:'o'},{t:'#可邮寄',c:'b'}],q:'据说找到我的人都会有好运哦～',df:1,bg:'linear-gradient(150deg,#E0F8E8,#B8ECC8,#90DCA8)',p:'clover'},
 ];
 var ci=0,dr=false,sx=0,cx=0,Q=function(s){return document.querySelector(s)};
 function init(){buildBal();sP('mpP','sprout',80);sP('mpA','monstera',48);sP('crtP','monstera',60);sP('prA','person',60);sP('chA','monstera',26);sP('ma1','monstera',26);sP('ma2','flower',26);sP('ma3','cactus',26);
